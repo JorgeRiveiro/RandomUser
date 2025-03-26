@@ -6,11 +6,9 @@ data class User(
     val profileImage: String
 )
 
-val users: List<User>
-    get() = (1..100).map {
-        User(
-            id = it,
-            title = "User $it",
-            profileImage = "https://picsum.photos/400/400"
-        )
-    }
+data class UserDetails(
+    val id: Int,
+    val fullName: String,
+    val email: String,
+    val profileImage: String
+)

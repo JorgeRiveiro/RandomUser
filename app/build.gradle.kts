@@ -1,7 +1,10 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -16,6 +19,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").readText().byteInputStream())
+
+        val tudbApiKey = properties.getProperty("TUDB_API_KEY", "")
+        buildConfigField("String", "TUDB_API_KEY", "\"$tudbApiKey\"")
     }
 
     buildTypes {
@@ -36,6 +45,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -52,6 +62,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.play.services.location)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
