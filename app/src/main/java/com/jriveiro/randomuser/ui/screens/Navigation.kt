@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.jriveiro.randomuser.ui.screens.detail.DetailScreen
 import com.jriveiro.randomuser.ui.screens.home.HomeScreen
-import com.jriveiro.randomuser.users
+import com.jriveiro.randomuser.data.users
 
 @Composable
 fun Navigation() {

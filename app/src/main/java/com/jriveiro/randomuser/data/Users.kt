@@ -1,4 +1,4 @@
-package com.jriveiro.randomuser
+package com.jriveiro.randomuser.data
 
 data class User(
     val id: Int,

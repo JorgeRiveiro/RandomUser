@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.jriveiro.randomuser.R
-import com.jriveiro.randomuser.User
+import com.jriveiro.randomuser.data.User
 import com.jriveiro.randomuser.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
