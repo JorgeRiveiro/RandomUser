@@ -41,19 +41,25 @@ suspend fun FusedLocationProviderClient.lastLocation(): Location? {
     }
 }
 
-@Suppress("DEPRECATION")
 suspend fun Geocoder.getFromLocationCompat(
-    @FloatRange(from = -90.0, to = 90.0) latitude: Double,
-    @FloatRange(from = -180.0, to = 180.0) longitude: Double,
-    @IntRange maxResults: Int
+    latitude: Double,
+    longitude: Double,
+    maxResults: Int
 ): List<Address> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     suspendCancellableCoroutine { continuation ->
-        getFromLocation(latitude, longitude, maxResults) {
-            continuation.resume(it)
-        }
+        getFromLocation(latitude, longitude, maxResults, object : Geocoder.GeocodeListener {
+            override fun onGeocode(addresses: MutableList<Address>) {
+                continuation.resume(addresses)
+            }
+
+            override fun onError(errorMessage: String?) {
+                continuation.resume(emptyList())
+            }
+        })
     }
 } else {
     withContext(Dispatchers.IO) {
+        @Suppress("DEPRECATION")
         getFromLocation(latitude, longitude, maxResults) ?: emptyList()
     }
 }
