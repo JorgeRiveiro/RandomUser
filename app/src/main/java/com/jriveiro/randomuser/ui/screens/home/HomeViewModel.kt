@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jriveiro.randomuser.data.User
 import com.jriveiro.randomuser.data.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
-
-    private val repository : UsersRepository = UsersRepository()
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: UsersRepository
+) : ViewModel() {
 
     var state by mutableStateOf(UiState())
         private set

@@ -1,6 +1,8 @@
 package com.jriveiro.randomuser.data
 
-class UsersRepository{
+import javax.inject.Inject
+
+class UsersRepository @Inject constructor(){
     suspend fun fetchAllUsers(): List<User> = UsersClient.instance.fetchUsers()
         .data
         .map { it.toDomainModel() }

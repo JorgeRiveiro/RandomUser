@@ -36,7 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jriveiro.randomuser.R
 import com.jriveiro.randomuser.data.User
@@ -49,8 +49,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     onUserClick: (User) -> Unit,
-    viewModel: HomeViewModel = viewModel()
-    ){
+    viewModel: HomeViewModel = hiltViewModel()
+){
     val appName = stringResource(id = R.string.app_name)
     var appBarTitle by remember { mutableStateOf(appName) }
     val ctx = LocalContext.current.applicationContext

@@ -9,6 +9,9 @@ plugins {
     alias(libs.plugins.ksp)
     kotlin("kapt")
 }
+hilt {
+    enableAggregatingTask = false
+}
 
 android {
     namespace = "com.jriveiro.randomuser"
@@ -77,6 +80,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
