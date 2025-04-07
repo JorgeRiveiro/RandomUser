@@ -1,6 +1,7 @@
 package com.jriveiro.randomuser.ui.screens
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -24,10 +25,11 @@ fun Navigation() {
             route = "detail/{userId}",
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val userId = requireNotNull(backStackEntry.arguments?.getInt("userId"))
+            val viewModel: DetailViewModel = hiltViewModel(backStackEntry)
             DetailScreen(
-                viewModel = viewModel{ DetailViewModel(userId)},
-                onBack = { navController.popBackStack() })
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }

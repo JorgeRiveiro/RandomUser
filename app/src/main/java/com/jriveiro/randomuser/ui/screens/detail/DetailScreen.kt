@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jriveiro.randomuser.R
 import com.jriveiro.randomuser.data.User
@@ -31,7 +32,7 @@ import com.jriveiro.randomuser.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(viewModel: DetailViewModel, onBack: () -> Unit) {
+fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
 
     val state = viewModel.state
 
