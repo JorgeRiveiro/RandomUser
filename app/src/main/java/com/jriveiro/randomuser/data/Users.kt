@@ -3,6 +3,7 @@ package com.jriveiro.randomuser.data
 data class User(
     val id: Int,
     val title: String,
+    val email: String,
     val profileImage: String
 )
 
