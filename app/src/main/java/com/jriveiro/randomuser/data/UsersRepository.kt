@@ -7,9 +7,12 @@ import javax.inject.Inject
 class UsersRepository @Inject constructor(
     private val userDao: UserDao
 ) {
-    suspend fun fetchAllUsers(): List<User> {
-        val users = UsersClient.instance.fetchUsers()
-            .data
+
+    private var autoIncrementId = 1
+
+    suspend fun fetchAllUsers(results: Int = 50): List<User> {
+        val users = UsersClient.instance.fetchUsers(results)
+            .results
             .map { it.toDomainModel() }
         userDao.insertAll(users.map { it.toEntity() })
         return users
@@ -18,14 +21,15 @@ class UsersRepository @Inject constructor(
     suspend fun findUserById(id: Int): UserDetails? {
         return userDao.getUserById(id)?.toUserDetails()
     }
+
+    private fun RemoteUser.toDomainModel() = User(
+        id = id.value ?: autoIncrementId++.toString(),
+        title = "${name.first} ${name.last}",
+        email = email,
+        profileImage = picture.medium
+    )
 }
 
-private fun RemoteUser.toDomainModel() = User(
-    id = id,
-    title = "$firstName $lastName",
-    email = email,
-    profileImage = avatar
-)
 
 private fun User.toEntity() = UserEntity(
     id = id,

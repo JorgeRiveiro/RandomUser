@@ -21,7 +21,7 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "random_user_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

@@ -18,7 +18,7 @@ object UsersClient {
     }
 
     val instance = Retrofit.Builder()
-        .baseUrl("https://reqres.in/")
+        .baseUrl("https://randomuser.me/")
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()

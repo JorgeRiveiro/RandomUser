@@ -1,14 +1,14 @@
 package com.jriveiro.randomuser.data
 
 data class User(
-    val id: Int,
+    val id: String,
     val title: String,
     val email: String,
     val profileImage: String
 )
 
 data class UserDetails(
-    val id: Int,
+    val id: String,
     val fullName: String,
     val email: String,
     val profileImage: String
