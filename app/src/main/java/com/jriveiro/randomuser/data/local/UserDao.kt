@@ -7,6 +7,9 @@ import androidx.room.Query
 
 @Dao
 interface UserDao {
+    @Query("DELETE FROM users")
+    suspend fun clearTable()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(users: List<UserEntity>)
 

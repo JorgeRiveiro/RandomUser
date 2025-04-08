@@ -14,6 +14,7 @@ class UsersRepository @Inject constructor(
         val users = UsersClient.instance.fetchUsers(results)
             .results
             .map { it.toDomainModel() }
+        userDao.clearTable()
         userDao.insertAll(users.map { it.toEntity() })
         return users
     }
