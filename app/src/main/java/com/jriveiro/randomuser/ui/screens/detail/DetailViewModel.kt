@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.jriveiro.randomuser.data.UserDetails
 import com.jriveiro.randomuser.data.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +22,8 @@ class DetailViewModel @Inject constructor(
     private val userId: String = savedStateHandle["userId"]
         ?: throw IllegalArgumentException("User ID not found in saved state")
 
-    var state by mutableStateOf(UiState())
-        private set
+    private val _state = MutableStateFlow(UiState())
+    val state get() = _state.asStateFlow()
 
     data class UiState(
         val loading: Boolean = false,
@@ -30,8 +32,8 @@ class DetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            state = UiState(loading = true)
-            state = UiState(loading = false, userDetails = repository.findUserById(userId))
+            _state.value = UiState(loading = true)
+            _state.value = UiState(loading = false, userDetails = repository.findUserById(userId))
         }
     }
 }
