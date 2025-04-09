@@ -17,7 +17,8 @@ class DetailViewModel @Inject constructor(
     private val repository: UsersRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val userId: Int = savedStateHandle["userId"] ?: 0
+    private val userId: String = savedStateHandle["userId"]
+        ?: throw IllegalArgumentException("User ID not found in saved state")
 
     var state by mutableStateOf(UiState())
         private set

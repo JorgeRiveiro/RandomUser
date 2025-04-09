@@ -23,7 +23,7 @@ fun Navigation() {
         }
         composable(
             route = "detail/{userId}",
-            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
         ) { backStackEntry ->
             val viewModel: DetailViewModel = hiltViewModel(backStackEntry)
             DetailScreen(

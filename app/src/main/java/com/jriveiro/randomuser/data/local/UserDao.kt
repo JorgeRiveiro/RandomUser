@@ -14,5 +14,5 @@ interface UserDao {
     suspend fun insertAll(users: List<UserEntity>)
 
     @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserById(userId: Int): UserEntity?
+    suspend fun getUserById(userId: String): UserEntity?
 }
