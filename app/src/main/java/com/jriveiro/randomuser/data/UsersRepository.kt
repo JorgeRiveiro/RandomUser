@@ -8,12 +8,18 @@ class UsersRepository @Inject constructor(
     private val userDao: UserDao
 ) {
 
+    private var cachedUsers: List<User>? = null
+
     suspend fun fetchAllUsers(results: Int = 50): List<User> {
+        if (cachedUsers != null) {
+            return cachedUsers!!
+        }
         val users = UsersClient.instance.fetchUsers(results)
             .results
             .map { it.toDomainModel() }
         userDao.clearTable()
         userDao.insertAll(users.map { it.toEntity() })
+        cachedUsers = users
         return users
     }
 
