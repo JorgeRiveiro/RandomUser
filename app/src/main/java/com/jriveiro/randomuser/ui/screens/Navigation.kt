@@ -12,18 +12,29 @@ import com.jriveiro.randomuser.ui.screens.detail.DetailScreen
 import com.jriveiro.randomuser.ui.screens.detail.DetailViewModel
 import com.jriveiro.randomuser.ui.screens.home.HomeScreen
 
+sealed class Screen(val route: String) {
+    data object Home : Screen("home")
+    data object Detail : Screen("detail/{userId}") {
+        fun createRoute(userId: String) = "detail/$userId"
+    }
+}
+
+enum class NavArguments(val key: String) {
+    USER_ID("userId")
+}
+
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") {
+    NavHost(navController = navController, startDestination = Screen.Home.route) {
+        composable(Screen.Home.route) {
             HomeScreen(onUserClick = { user ->
-                navController.navigate("detail/${user.id}")
+                navController.navigate(Screen.Detail.createRoute(user.id))
             })
         }
         composable(
-            route = "detail/{userId}",
-            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+            route = Screen.Detail.route,
+            arguments = listOf(navArgument(NavArguments.USER_ID.key) { type = NavType.StringType })
         ) { backStackEntry ->
             val viewModel: DetailViewModel = hiltViewModel(backStackEntry)
             DetailScreen(
