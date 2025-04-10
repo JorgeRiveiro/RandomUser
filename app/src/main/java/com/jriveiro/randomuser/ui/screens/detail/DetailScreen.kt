@@ -12,19 +12,25 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,7 +38,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -45,7 +50,15 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Uni
 
     val state by viewModel.state.collectAsState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(state.message) {
+        state.message?.let {
+            snackbarHostState.currentSnackbarData?.dismiss()
+            snackbarHostState.showSnackbar(it)
+            viewModel.onMessageShown()
+        }
+    }
 
     Screen {
         Scaffold(
@@ -56,6 +69,15 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Uni
                     onBack = onBack
                 )
             },
+            floatingActionButton = {
+                FloatingActionButton(onClick = {viewModel.onFavoriteClick()}) {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = stringResource(id = R.string.back)
+                    )
+                }
+            },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
             if (state.loading) {
@@ -77,7 +99,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Uni
                     dateBirthday = userDetails.dateOfBirth,
                     address = userDetails.address,
                     numberPhone = userDetails.numberPhone,
-                    modifier = Modifier.padding(padding) // Ajuste aquí
+                    modifier = Modifier.padding(padding)
                 )
             }
         }

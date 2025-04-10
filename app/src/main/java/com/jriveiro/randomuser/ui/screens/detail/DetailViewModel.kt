@@ -8,6 +8,7 @@ import com.jriveiro.randomuser.data.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ class DetailViewModel @Inject constructor(
     private val repository: UsersRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
     private val userId: String = savedStateHandle["userId"]
         ?: throw IllegalArgumentException("User ID not found in saved state")
 
@@ -24,7 +26,8 @@ class DetailViewModel @Inject constructor(
 
     data class UiState(
         val loading: Boolean = false,
-        val userDetails: UserDetails? = null
+        val userDetails: UserDetails? = null,
+        val message: String? = null
     )
 
     init {
@@ -32,5 +35,13 @@ class DetailViewModel @Inject constructor(
             _state.value = UiState(loading = true)
             _state.value = UiState(loading = false, userDetails = repository.findUserById(userId))
         }
+    }
+
+    fun onFavoriteClick() {
+        _state.update { it.copy(message = "Favorite Clicked") }
+    }
+
+    fun onMessageShown() {
+        _state.update { it.copy(message = null) }
     }
 }
