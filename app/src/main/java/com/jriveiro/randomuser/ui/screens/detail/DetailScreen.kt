@@ -21,16 +21,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,15 +45,10 @@ import com.jriveiro.randomuser.ui.screens.Screen
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
 
     val state by viewModel.state.collectAsState()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val detailState = rememberDetailState()
 
-    LaunchedEffect(state.message) {
-        state.message?.let {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(it)
-            viewModel.onMessageShown()
-        }
+    detailState.ShowMessageEffect(message = state.message) {
+        viewModel.onMessageShown()
     }
 
     Screen {
@@ -65,7 +56,7 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Uni
             topBar = {
                 DetailTopBar(
                     title = state.userDetails?.fullName ?: "",
-                    scrollBehavior = scrollBehavior,
+                    scrollBehavior = detailState.scrollBehavior,
                     onBack = onBack
                 )
             },
@@ -77,8 +68,8 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Uni
                     )
                 }
             },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            snackbarHost = { SnackbarHost(hostState = detailState.snackbarHostState) },
+            modifier = Modifier.nestedScroll(detailState.scrollBehavior.nestedScrollConnection)
         ) { padding ->
             if (state.loading) {
                 Box(

@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(UiState())
     val state get() = _state.asStateFlow()
 
-    fun onUiReady() {
+    fun onUiReady(region: String) {
         viewModelScope.launch {
             _state.value = UiState(loading = true)
             _state.value = UiState(loading = false, users = repository.fetchAllUsers())
