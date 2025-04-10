@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">RandomUser</string>
     <string name="back">Back</string>
+    <string name="titlePhone">Número de teléfono:</string>
+    <string name="titleAddress">Dirección:</string>
+    <string name="titleBirthday">Año de nacimiento:</string>
+    <string name="titleEmail">Email:</string>
 </resources>

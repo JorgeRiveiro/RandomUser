@@ -32,7 +32,10 @@ private fun RemoteUser.toDomainModel() = User(
     id = login.uuid,
     title = "${name.first} ${name.last}",
     email = email,
-    profileImage = picture.medium
+    profileImage = picture.large,
+    dateOfBirth = dob.date,
+    address = "${location.street.name}, ${location.city}, ${location.country}",
+    numberPhone = phone
 )
 
 private fun User.toEntity() = UserEntity(
@@ -40,12 +43,18 @@ private fun User.toEntity() = UserEntity(
     firstName = title.split(" ")[0],
     lastName = title.split(" ")[1],
     email = email,
-    avatar = profileImage
+    avatar = profileImage,
+    dateOfBirth = dateOfBirth,
+    address = address,
+    numberPhone = numberPhone
 )
 
 private fun UserEntity.toUserDetails() = UserDetails(
     id = id,
     fullName = "$firstName $lastName",
     email = email,
-    profileImage = avatar
+    profileImage = avatar,
+    dateOfBirth = dateOfBirth,
+    address =address,
+    numberPhone = numberPhone
 )
