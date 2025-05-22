@@ -16,7 +16,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
-    val state get() = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     fun onUiReady(region: String) {
         viewModelScope.launch {

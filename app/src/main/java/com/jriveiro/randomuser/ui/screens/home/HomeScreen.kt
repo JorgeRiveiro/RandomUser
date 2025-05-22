@@ -39,7 +39,7 @@ import com.jriveiro.randomuser.ui.screens.Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onUserClick: (User) -> Unit,
+    onUserClick: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ){
     val homeState = rememberHomeState()
@@ -76,7 +76,7 @@ fun HomeScreen(
                 modifier = Modifier.padding(horizontal = 4.dp)
             ) {
                 items(state.users, key = { it.id }) {
-                    UserItem(user = it){onUserClick(it)}
+                    UserItem(user = it){onUserClick(it.id)}
                 }
             }
         }

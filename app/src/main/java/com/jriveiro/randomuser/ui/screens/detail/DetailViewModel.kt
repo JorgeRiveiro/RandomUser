@@ -18,11 +18,11 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val userId: String = savedStateHandle["userId"]
+    private val userId: String = savedStateHandle["id"]
         ?: throw IllegalArgumentException("User ID not found in saved state")
 
     private val _state = MutableStateFlow(UiState())
-    val state get() = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     data class UiState(
         val loading: Boolean = false,

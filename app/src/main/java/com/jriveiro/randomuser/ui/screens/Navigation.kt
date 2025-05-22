@@ -2,39 +2,32 @@ package com.jriveiro.randomuser.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.jriveiro.randomuser.ui.screens.detail.DetailScreen
 import com.jriveiro.randomuser.ui.screens.detail.DetailViewModel
 import com.jriveiro.randomuser.ui.screens.home.HomeScreen
+import kotlinx.serialization.Serializable
 
-sealed class Screen(val route: String) {
-    data object Home : Screen("home")
-    data object Detail : Screen("detail/{userId}") {
-        fun createRoute(userId: String) = "detail/$userId"
-    }
-}
-
-enum class NavArguments(val key: String) {
-    USER_ID("userId")
+sealed class Screen() {
+    @Serializable
+    object Home
+    @Serializable
+    data class Detail(val id: String)
 }
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(Screen.Home.route) {
+    NavHost(navController = navController, startDestination = Screen.Home) {
+        composable<Screen.Home> {
             HomeScreen(onUserClick = { user ->
-                navController.navigate(Screen.Detail.createRoute(user.id))
+                navController.navigate(Screen.Detail(user))
             })
         }
-        composable(
-            route = Screen.Detail.route,
-            arguments = listOf(navArgument(NavArguments.USER_ID.key) { type = NavType.StringType })
-        ) { backStackEntry ->
+        composable<Screen.Detail> {
+            backStackEntry ->
             val viewModel: DetailViewModel = hiltViewModel(backStackEntry)
             DetailScreen(
                 viewModel = viewModel,
